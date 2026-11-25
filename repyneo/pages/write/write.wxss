@@ -1,0 +1,729 @@
+/* 01 星期与安排 */
+.day-tabs {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 18rpx;
+  white-space: nowrap;
+}
+
+.day-tab {
+  flex: 1 0 88rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+  min-height: 88rpx;
+  padding: 12rpx 0;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.day-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.day-tab:active {
+  background: var(--sky-soft);
+}
+
+.day-tab.on:active {
+  background: #174e8c;
+}
+
+.day-count {
+  color: var(--muted);
+  font-size: 20rpx;
+  font-weight: 600;
+}
+
+.day-tab.on .day-count {
+  color: #cfe6fb;
+}
+
+.plan-name {
+  margin-bottom: 14rpx;
+  color: var(--ink2);
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.plan-grid,
+.pool-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.plan-chip,
+.pool-item {
+  flex: 1 1 210rpx;
+  min-width: 210rpx;
+  padding: 16rpx 18rpx;
+  border: 3rpx solid transparent;
+  border-radius: var(--r);
+}
+
+.plan-chip:active,
+.pool-item:active {
+  transform: translateY(1rpx);
+  border-color: var(--sky-deep);
+}
+
+.plan-chip.picked,
+.pool-item.picked {
+  border-color: var(--ink);
+}
+
+/* 卡底色用部位索引色，动作名和部位字一律深灰 */
+.plan-chip-name,
+.pool-name {
+  display: block;
+  color: var(--name-ink);
+  font-size: 26rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.plan-chip-group,
+.pool-group {
+  display: block;
+  margin-top: 4rpx;
+  color: var(--part-ink);
+  font-size: 21rpx;
+}
+
+.pool-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 20rpx;
+  color: var(--navy);
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: var(--r);
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.pool-toggle:active {
+  background: #d6edfa;
+}
+
+.pool-arrow {
+  flex: none;
+  width: 0;
+  height: 0;
+  border-left: 9rpx solid transparent;
+  border-right: 9rpx solid transparent;
+  border-top: 11rpx solid var(--muted);
+  transition: transform 0.18s ease;
+}
+
+.pool-arrow.on {
+  transform: rotate(180deg);
+}
+
+.search,
+.note-area,
+.add-label {
+  width: 100%;
+}
+
+.search {
+  margin-top: 18rpx;
+  min-height: 72rpx;
+  padding: 0 22rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 26rpx;
+}
+
+.group-tabs {
+  display: flex;
+  gap: 10rpx;
+  margin: 16rpx 0;
+  white-space: nowrap;
+}
+
+.group-tab {
+  flex: none;
+  padding: 10rpx 22rpx;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.group-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.group-tab:active {
+  background: var(--sky-soft);
+}
+
+.pool-grid {
+  margin-bottom: 16rpx;
+}
+
+/* 02 编排卡片 */
+.entry {
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12rpx;
+  margin-bottom: 14rpx;
+}
+
+.entry-title {
+  flex: 1 1 220rpx;
+  min-width: 220rpx;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.entry-name {
+  color: var(--name-ink);
+  font-size: 29rpx;
+  font-weight: 900;
+}
+
+.entry-tools {
+  flex: none;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 8rpx;
+  margin-left: auto;
+}
+
+/* 卡再窄也整行一起掉下去，别让「×」自己单独掉一行 */
+.entry-tools .tool {
+  flex: none;
+  white-space: nowrap;
+}
+
+.tool {
+  min-width: 52rpx;
+  padding: 4rpx 12rpx;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: 12rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.tool:active {
+  background: var(--sky-soft);
+}
+
+.tool.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.tool.danger {
+  color: var(--red);
+  border-color: #f0c7c4;
+}
+
+.entry-note {
+  margin-bottom: 12rpx;
+  color: var(--muted);
+  font-size: 22rpx;
+}
+
+.load-row,
+.seg-row {
+  margin-top: 14rpx;
+  padding: 16rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.load-line,
+.sets-line,
+.rep-line,
+.seg-line,
+.seg-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.fld {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 64rpx;
+  padding: 0 18rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: 16rpx;
+  font-size: 25rpx;
+}
+
+.fld.wide {
+  width: 100%;
+  margin-bottom: 12rpx;
+}
+
+.each,
+.step,
+.preset,
+.unit,
+.rep-mode,
+.add-group {
+  flex: none;
+  padding: 8rpx 16rpx;
+  color: var(--ink2);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.each:active,
+.step:active,
+.preset:active,
+.unit:active,
+.rep-mode:active,
+.add-group:active {
+  background: var(--sky-soft);
+}
+
+.each.on,
+.preset.on,
+.unit.on,
+.add-group.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.sets-label,
+.rep-label,
+.seg-index {
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.sets-num {
+  min-width: 40rpx;
+  color: var(--ink);
+  font-size: 26rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.presets,
+.unit-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.rep-line {
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.rep-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 12rpx;
+}
+
+.fld.rep {
+  flex: 0 0 96rpx;
+  min-width: 96rpx;
+  text-align: center;
+}
+
+.seg-head {
+  justify-content: space-between;
+}
+
+/* plus */
+.effort-status {
+  margin-bottom: 22rpx;
+  padding: 20rpx 24rpx;
+  color: var(--ink);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 28rpx;
+  font-weight: 800;
+  text-align: center;
+}
+
+.effort-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 12rpx;
+  height: 264rpx;
+  padding: 0 6rpx 0;
+}
+
+.effort-bar {
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 14rpx 14rpx 8rpx 8rpx;
+  opacity: 0.55;
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 800;
+  padding-top: 6rpx;
+}
+
+.effort-bar.on {
+  opacity: 1;
+  border: 3rpx solid var(--ink);
+}
+
+.effort-bar:active {
+  opacity: 0.85;
+}
+
+/* 03 */
+.preview {
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  color: var(--ink);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 24rpx;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.btn-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.btn-row .btn {
+  flex: 1 1 0;
+}
+
+.foot-hint {
+  margin-top: 16rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  line-height: 1.7;
+}
+
+/* 弹窗里的输入 */
+.note-area {
+  min-height: 160rpx;
+  padding: 18rpx;
+  color: var(--ink);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 25rpx;
+}
+
+.add-label {
+  display: block;
+  margin: 18rpx 0 12rpx;
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.add-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+/* 改安排弹窗 */
+.plan-day-tabs {
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.plan-day-tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 0;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+/* 有安排的那天，给个能看见的小标记 */
+.plan-day-tab.is-set:not(.on) {
+  border-color: var(--sky-deep);
+  background: var(--sky-soft);
+}
+
+.plan-day-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.plan-day-count {
+  font-size: 20rpx;
+  color: var(--muted);
+}
+
+.plan-day-tab.on .plan-day-count {
+  color: #cfe6fb;
+}
+
+.plan-day-tab:active {
+  background: var(--sky-soft);
+}
+
+.sheet-body {
+  max-height: 34vh;
+}
+
+/* 内容多时整体仍可滚动，保证底部「保存安排」不会被裁掉 */
+.dialog {
+  overflow-y: auto;
+}
+
+/* ---------- 补记录提示条 ---------- */
+.backfill-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  padding: 18rpx 20rpx;
+  background: #eaf6ee;
+  border: 1rpx solid #a9d5b6;
+  border-radius: var(--r);
+}
+
+.bf-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.bf-title,
+.bf-date {
+  display: block;
+  color: #1c6b43;
+  font-weight: 800;
+}
+
+.bf-title {
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.bf-date {
+  margin-top: 2rpx;
+  font-size: 23rpx;
+}
+
+.bf-hint {
+  display: block;
+  margin-top: 2rpx;
+  color: #4d7d61;
+  font-size: 20rpx;
+}
+
+.backfill-bar .btn {
+  flex: none;
+}
+
+/* ---------- 改一周安排：照抄 / 已选 / 一键清空 ---------- */
+.plan-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.plan-picked-count {
+  color: var(--ink2);
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.plan-copy-menu {
+  margin-bottom: 16rpx;
+  padding: 16rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.plan-copy-lead {
+  display: block;
+  margin-bottom: 12rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.plan-copy-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.plan-copy-grid .btn {
+  flex: 0 0 auto;
+  min-width: 120rpx;
+}
+
+.plan-picked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+  padding: 14rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.picked-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 14rpx;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.picked-chip:active {
+  border-color: var(--sky-deep);
+}
+
+.picked-idx {
+  color: var(--part-ink);
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.picked-name {
+  color: var(--name-ink);
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.picked-x {
+  color: var(--red);
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.plan-picked-empty {
+  color: var(--muted);
+  font-size: 22rpx;
+}
+
+.plan-picked .btn {
+  flex: none;
+}
+
+/* 部位选项卡放不下时折行，不横向裁字 */
+.group-tabs-wrap {
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+/* 力量动作的多组重量（和桌面版「新增重量 / 组次」一套） */
+.load-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+  padding-bottom: 10rpx;
+  border-bottom: 1rpx dashed var(--rule);
+}
+
+.load-index {
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.load-row .tool {
+  line-height: 1.5;
+}
+
+.add-load-btn {
+  margin-top: 14rpx;
+}
+
+.add-load-btn:active {
+  background: var(--sky-soft);
+}
+
+/* 已选动作的角标：挂在部位那一行的右端，不压动作名 */
+.chip-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rpx;
+  margin-top: 4rpx;
+}
+
+.chip-meta .plan-chip-group,
+.chip-meta .pool-group {
+  margin-top: 0;
+}
+
+.picked-mark {
+  flex: none;
+  padding: 0 10rpx;
+  color: var(--navy);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1rpx solid var(--sky-line);
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.5;
+}

@@ -1,0 +1,291 @@
+<view class="page-wrap">
+
+  <!-- 机器人 -->
+  <view class="topbar">
+    <image class="bot-avatar" src="/assets/repy-robot.png" mode="aspectFit" />
+    <view class="bot-bubble">{{botLine}}</view>
+  </view>
+
+  <!-- 补记录提示条：从复盘页带日期过来时挂着，保存完自动收起 -->
+  <view wx:if="{{backfillDate}}" class="backfill-bar">
+    <view class="bf-text">
+      <text class="bf-title">补记录中</text>
+      <text class="bf-date">正在补 {{backfillLabel}} 的记录</text>
+      <text class="bf-hint">编排好点「保存本次训练」，这天就补上了</text>
+    </view>
+    <button class="btn btn-sm btn-ghost" bindtap="cancelBackfill">取消补记</button>
+  </view>
+
+  <!-- 01 选动作 -->
+  <view class="card">
+    <view class="card-head">
+      <text class="sec-num">01</text>
+      <view class="card-title">
+        <text class="t">按星期选动作</text>
+      </view>
+      <button class="btn btn-sm btn-soft" bindtap="openPlanEdit">改安排</button>
+    </view>
+
+    <scroll-view class="day-tabs" scroll-x enable-flex>
+      <view wx:for="{{dayTabs}}" wx:key="day" class="day-tab {{item.active ? 'on' : ''}}" data-day="{{item.day}}" bindtap="setDay">
+        <text class="day-label">{{item.label}}</text>
+        <text class="day-count">{{item.count}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="plan-name">{{planName}}</view>
+    <view wx:if="{{planEmpty}}" class="empty">今天没有安排，展开动作池自己挑。</view>
+    <view wx:else class="plan-grid">
+      <view wx:for="{{planItems}}" wx:key="id" class="plan-chip {{item.picked ? 'picked' : ''}}" style="background:{{item.tint}}" data-id="{{item.id}}" bindtap="addAction">
+        <text class="plan-chip-name">{{item.name}}</text>
+        <view class="chip-meta">
+          <text class="plan-chip-group">{{item.group}}{{item.cardio ? ' · 有氧' : ''}}</text>
+          <text wx:if="{{item.picked}}" class="picked-mark">✓ 已加入</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="pool-toggle" bindtap="togglePool">
+      <text>{{poolOpen ? '收起动作池' : '展开动作池'}}</text>
+      <view class="pool-arrow {{poolOpen ? 'on' : ''}}"></view>
+    </view>
+
+    <block wx:if="{{poolOpen}}">
+      <input class="search" placeholder="搜动作名或别名" value="{{search}}" bindinput="inputSearch" confirm-type="search" />
+      <scroll-view class="group-tabs" scroll-x enable-flex>
+        <view wx:for="{{groupTabs}}" wx:key="key" class="group-tab {{item.active ? 'on' : ''}}" data-key="{{item.key}}" bindtap="setGroup">{{item.label}}</view>
+      </scroll-view>
+      <view wx:if="{{!poolItems.length}}" class="empty">这个部位里没有匹配的动作。</view>
+      <view class="pool-grid">
+        <view wx:for="{{poolItems}}" wx:key="id" class="pool-item {{item.picked ? 'picked' : ''}}" style="background:{{item.tint}}" data-id="{{item.id}}" bindtap="addAction">
+          <text class="pool-name">{{item.name}}</text>
+          <view class="chip-meta">
+            <text class="pool-group">{{item.group}}{{item.cardio ? ' · 有氧' : ''}}</text>
+            <text wx:if="{{item.picked}}" class="picked-mark">✓ 已加入</text>
+          </view>
+        </view>
+      </view>
+      <button class="btn btn-sm btn-ghost btn-block" bindtap="openAdd">＋ 新建动作</button>
+    </block>
+  </view>
+
+  <!-- 02 编排 -->
+  <view class="card">
+    <view class="card-head">
+      <text class="sec-num">02</text>
+      <view class="card-title">
+        <text class="t">编排动作</text>
+        <text class="d">{{summary}}</text>
+      </view>
+      <button wx:if="{{selectedCount}}" class="btn btn-sm btn-danger" bindtap="clearAll">清空</button>
+    </view>
+
+    <view wx:if="{{!selectedCount}}" class="empty">还没有动作，从上面点一个加进来。</view>
+
+    <view wx:for="{{selected}}" wx:key="uid" wx:for-item="entry" wx:for-index="ei" class="entry" style="background:{{entry.tint}}">
+      <view class="entry-head">
+        <view class="entry-title">
+          <text class="entry-name">{{entry.name}}</text>
+          <text class="chip">{{entry.group}}</text>
+        </view>
+        <view class="entry-tools">
+          <text class="tool {{entry.isKey ? 'on' : ''}}" data-uid="{{entry.uid}}" bindtap="toggleKey">关键重量</text>
+          <text class="tool" data-uid="{{entry.uid}}" bindtap="openNote">备注</text>
+          <text class="tool" data-uid="{{entry.uid}}" data-dir="-1" bindtap="moveAction">↑</text>
+          <text class="tool" data-uid="{{entry.uid}}" data-dir="1" bindtap="moveAction">↓</text>
+          <text class="tool danger" data-uid="{{entry.uid}}" bindtap="removeAction">×</text>
+        </view>
+      </view>
+      <view wx:if="{{entry.note}}" class="entry-note">备注：{{entry.note}}</view>
+
+      <!-- 力量：一个动作可以有多组重量（按上一条的组数摊开，比着桌面版的「新增重量 / 组次」） -->
+      <block wx:if="{{!entry.cardio}}">
+        <view wx:for="{{entry.loads}}" wx:for-item="load" wx:for-index="li" wx:key="uid" id="load-{{load.uid}}" class="load-row">
+          <view wx:if="{{entry.loads.length > 1}}" class="load-head">
+            <text class="load-index">第 {{li + 1}} 组</text>
+            <text class="tool danger" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindtap="removeLoad">删</text>
+          </view>
+          <view class="load-line">
+            <input class="fld" type="digit" placeholder="重量" value="{{load.weight}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindinput="inputWeight" />
+            <text class="each {{load.eachSide ? 'on' : ''}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindtap="toggleEachSide">各边</text>
+          </view>
+          <view class="sets-line">
+            <text class="sets-label">组数</text>
+            <text class="step" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-dir="-1" bindtap="setSets">−</text>
+            <text class="sets-num">{{load.sets}}</text>
+            <text class="step" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-dir="1" bindtap="setSets">＋</text>
+            <view class="presets">
+              <text wx:for="{{setsPresets}}" wx:for-item="p" wx:key="*this" class="preset {{load.sets === p ? 'on' : ''}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-value="{{p}}" bindtap="applySetsPreset">{{p}}</text>
+            </view>
+          </view>
+          <view class="rep-line">
+            <text class="rep-label">每组次数</text>
+            <text class="rep-mode" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindtap="toggleRepMode">{{load.repMode === 'same' ? '统一 · 切换分别' : '分别 · 切换统一'}}</text>
+          </view>
+          <input wx:if="{{load.repMode === 'same'}}" class="fld wide" type="number" placeholder="次数" value="{{load.sameRep}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindinput="inputSameRep" />
+          <view wx:else class="rep-grid">
+            <input wx:for="{{load.reps}}" wx:for-item="rep" wx:for-index="ri" wx:key="*this" class="fld rep" type="number" placeholder="{{ri + 1}}" value="{{rep}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-index="{{ri}}" bindinput="inputRep" />
+          </view>
+          <view class="presets">
+            <text wx:for="{{repsPresets}}" wx:for-item="p" wx:key="*this" class="preset" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-value="{{p}}" bindtap="applyRepsPreset">{{p}} 次</text>
+          </view>
+        </view>
+        <button class="btn btn-sm btn-ghost btn-block add-load-btn" data-uid="{{entry.uid}}" bindtap="addLoad">＋ 新增重量 / 组次</button>
+      </block>
+
+      <!-- 有氧 -->
+      <block wx:else>
+        <view wx:for="{{entry.loads}}" wx:for-item="load" wx:for-index="li" wx:key="uid" class="seg-row">
+          <view class="seg-head">
+            <text class="seg-index">第 {{li + 1}} 段</text>
+            <text class="tool danger" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindtap="removeSegment">删</text>
+          </view>
+          <input class="fld wide" type="text" placeholder="规格，如 5 km / 30 分钟" value="{{load.spec}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindinput="inputSpec" />
+          <view class="seg-line">
+            <input class="fld" type="digit" placeholder="配速" value="{{load.pace}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindinput="inputPace" />
+            <view class="unit-tabs">
+              <text wx:for="{{paceUnits}}" wx:for-item="u" wx:key="*this" class="unit {{load.paceUnit === u ? 'on' : ''}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" data-unit="{{u}}" bindtap="setPaceUnit">{{u}}</text>
+            </view>
+          </view>
+          <input class="fld wide" type="text" placeholder="附加，如 坡度 8" value="{{load.extra}}" data-uid="{{entry.uid}}" data-load="{{load.uid}}" bindinput="inputExtra" />
+        </view>
+        <button class="btn btn-sm btn-ghost btn-block" data-uid="{{entry.uid}}" bindtap="addSegment">＋ 加一段</button>
+      </block>
+    </view>
+  </view>
+
+  <!-- plus 训练负荷 -->
+  <view class="card">
+    <view class="card-head">
+      <text class="sec-num">plus</text>
+      <view class="card-title">
+        <text class="t">选择训练负荷</text>
+        <text class="d">给这次训练留个感受，数字越大越累</text>
+      </view>
+    </view>
+    <view class="effort-status">{{effortStatus}}</view>
+    <view class="effort-bars">
+      <view wx:for="{{effortLevels}}" wx:key="level" class="effort-bar {{item.on ? 'on' : ''}}" style="height:{{item.height}}rpx;background:{{item.color}}" data-level="{{item.level}}" bindtap="setEffort">
+        <text>{{item.level}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 03 保存 -->
+  <view class="card">
+    <view class="card-head">
+      <text class="sec-num">03</text>
+      <view class="card-title">
+        <text class="t">保存、复制、或进一步</text>
+        <text class="d">可以直接保存，也可以带回电脑上接着写</text>
+      </view>
+    </view>
+    <view class="preview">{{preview}}</view>
+    <button class="btn btn-main btn-block" bindtap="saveRecord">保存本次训练</button>
+    <view class="btn-row">
+      <button class="btn btn-ghost" bindtap="copyText">复制到剪贴板</button>
+      <button class="btn btn-soft" bindtap="continueInRepy">在 Repy 继续</button>
+    </view>
+    <view class="foot-hint">「在 Repy 继续」会生成一份 JSON，发到文件传输助手后拖进电脑版 Repy，就能接着写或直接记进复盘。</view>
+  </view>
+</view>
+
+<!-- 备注弹窗 -->
+<view class="mask dialog-mask" wx:if="{{noteOpen}}" bindtap="closeNote">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <text class="sheet-title">给这个动作留句话</text>
+      <text class="sheet-close" bindtap="closeNote">×</text>
+    </view>
+    <textarea class="note-area" placeholder="比如：今天状态不错，下次加 2.5KG" value="{{noteText}}" bindinput="inputNote" auto-height />
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="closeNote">取消</button>
+      <button class="btn btn-main" bindtap="saveNote">记下</button>
+    </view>
+  </view>
+</view>
+
+<!-- 新建动作弹窗 -->
+<view class="mask dialog-mask" wx:if="{{addOpen}}" bindtap="closeAdd">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <text class="sheet-title">新建一个动作</text>
+      <text class="sheet-close" bindtap="closeAdd">×</text>
+    </view>
+    <input class="fld wide" placeholder="动作名字" value="{{addName}}" bindinput="inputAddName" />
+    <view class="add-label">归到哪个部位</view>
+    <view class="add-groups">
+      <text wx:for="{{addGroups}}" wx:key="*this" class="add-group {{addGroup === item ? 'on' : ''}}" data-group="{{item}}" bindtap="pickAddGroup">{{item}}</text>
+    </view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="closeAdd">取消</button>
+      <button class="btn btn-main" bindtap="submitAdd">加进动作池</button>
+    </view>
+  </view>
+</view>
+
+<!-- 改一周安排：七天一起改，和桌面版同一套 -->
+<view class="mask dialog-mask" wx:if="{{planEditOpen}}" bindtap="closePlanEdit">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <view class="sheet-title-wrap">
+        <text class="sheet-title">改一周安排</text>
+        <text class="sheet-sub">七天都能改，保存时一起写回</text>
+      </view>
+      <text class="sheet-close" bindtap="closePlanEdit">×</text>
+    </view>
+
+    <view class="plan-day-tabs">
+      <view wx:for="{{planEditTabs}}" wx:key="day" class="plan-day-tab {{item.active ? 'on' : ''}} {{item.isSet ? 'is-set' : ''}}" data-day="{{item.day}}" bindtap="pickPlanDay">
+        <text>{{item.label}}</text>
+        <text class="plan-day-count">{{item.count}}</text>
+      </view>
+    </view>
+
+    <input class="fld wide" placeholder="给这天起个名字，比如 下肢 A" value="{{planEditName}}" bindinput="inputPlanName" />
+    <view class="plan-tools">
+      <button class="btn btn-sm btn-soft" bindtap="togglePlanCopy">{{planCopyOpen ? '收起' : '照抄某天'}}</button>
+      <text class="plan-picked-count">已选 {{planEditPickedCount}} 个</text>
+    </view>
+    <view wx:if="{{planCopyOpen}}" class="plan-copy-menu">
+      <text class="plan-copy-lead">照抄到{{planEditLabel}}，连名称带动作一起搬过来</text>
+      <view class="plan-copy-grid">
+        <button wx:for="{{planCopyMenu}}" wx:key="day" class="btn btn-sm {{item.self ? 'btn-ghost' : 'btn-soft'}}" disabled="{{item.self}}" data-day="{{item.day}}" bindtap="copyPlanFrom">{{item.text}}</button>
+      </view>
+    </view>
+
+    <!-- 这天已经安排的动作：点一下移除，也能一键清空 -->
+    <view class="plan-picked">
+      <block wx:if="{{planEditPicked.length}}">
+        <view wx:for="{{planEditPicked}}" wx:key="id" class="picked-chip" style="background:{{item.tint}}" data-id="{{item.id}}" bindtap="removePlanPicked">
+          <text class="picked-idx">{{item.index}}</text>
+          <text class="picked-name">{{item.name}}</text>
+          <text class="picked-x">×</text>
+        </view>
+        <button class="btn btn-sm btn-danger" bindtap="clearPlanPicked">一键清空</button>
+      </block>
+      <text wx:else class="plan-picked-empty">这一天还没有动作，从下面挑几个。</text>
+    </view>
+
+    <input class="search" placeholder="搜动作名或别名" value="{{planEditSearch}}" bindinput="inputPlanSearch" confirm-type="search" />
+    <view class="group-tabs group-tabs-wrap">
+      <view wx:for="{{planEditGroupTabs}}" wx:key="key" class="group-tab {{item.active ? 'on' : ''}}" data-key="{{item.key}}" bindtap="setPlanFilter">{{item.key}}</view>
+    </view>
+    <scroll-view class="sheet-body" scroll-y>
+      <view wx:if="{{!planEditItems.length}}" class="empty">没有匹配的动作，换个关键词或部位。</view>
+      <view class="picker-list">
+        <view wx:for="{{planEditItems}}" wx:key="id" class="picker-item {{item.picked ? 'on' : ''}}" style="background:{{item.picked ? item.tint : '#fff'}}" data-id="{{item.id}}" bindtap="togglePlanItem">
+          <text class="picker-name">{{item.name}}</text>
+          <text class="picker-group">{{item.group}}{{item.cardio ? ' · 有氧' : ''}}</text>
+          <text class="picker-mark">{{item.picked ? '已选' : '＋'}}</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="closePlanEdit">取消</button>
+      <button class="btn btn-main" bindtap="savePlanEdit">保存安排</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,289 @@
+<view class="page-wrap">
+
+  <!-- 版本号只在这里出现 -->
+  <view class="card about-card">
+    <view class="about-name">RepyNeo <text class="about-ver">{{version}}</text></view>
+    <view class="about-desc">把每次训练写清楚。手机上写好的编排，可以带回家在电脑上接着写。</view>
+  </view>
+
+  <!-- 操作习惯 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">
+        <text class="t">操作习惯</text>
+        <text class="d">只影响手感，不会改动已经保存的记录</text>
+      </view>
+    </view>
+
+    <view class="set-row">
+      <view class="set-row-text">
+        <text class="set-name">保存后清空编排</text>
+        <text class="set-desc">存完一次训练，就把当前编排收干净</text>
+      </view>
+      <switch checked="{{autoClearOnSave}}" data-key="autoClearOnSave" bindchange="toggleSetting" color="#1d5fa8" />
+    </view>
+    <view class="set-row">
+      <view class="set-row-text">
+        <text class="set-name">新建动作后直接加入编排</text>
+        <text class="set-desc">添加完动作就不用再回列表点一次</text>
+      </view>
+      <switch checked="{{autoAddAfterCreate}}" data-key="autoAddAfterCreate" bindchange="toggleSetting" color="#1d5fa8" />
+    </view>
+    <view class="set-row">
+      <view class="set-row-text">
+        <text class="set-name">补记录时弹提示</text>
+        <text class="set-desc">关掉后，点「补记录」直接选日期，不再弹说明窗</text>
+      </view>
+      <switch checked="{{backfillPrompt}}" data-key="backfillPrompt" bindchange="toggleSetting" color="#1d5fa8" />
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="preset-row">
+      <view class="set-row-text">
+        <text class="set-name">组数预设</text>
+        <text class="set-desc">最多 4 个，用顿号或逗号隔开</text>
+      </view>
+      <input class="preset-input" value="{{setsText}}" bindinput="inputSets" bindblur="saveSets" />
+    </view>
+    <view class="preset-row">
+      <view class="set-row-text">
+        <text class="set-name">次数预设</text>
+        <text class="set-desc">编排里一键填入的次数</text>
+      </view>
+      <input class="preset-input" value="{{repsText}}" bindinput="inputReps" bindblur="saveReps" />
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="preset-row">
+      <view class="set-row-text">
+        <text class="set-name">训练起点</text>
+        <text class="set-desc">用来算已经练了几天</text>
+      </view>
+      <picker mode="date" value="{{startDate || '2026-01-01'}}" bindchange="pickStartDate">
+        <view class="picker-value">{{startDate || '还没设起点'}}</view>
+      </picker>
+    </view>
+    <button wx:if="{{startDate}}" class="btn btn-sm btn-ghost btn-block" bindtap="clearStartDate">清掉起点</button>
+  </view>
+
+  <!-- plus 四档 -->
+  <view class="card">
+    <view class="card-head">
+      <text class="sec-num">plus</text>
+      <view class="card-title">
+        <text class="t">训练负荷四档</text>
+        <text class="d">给每次训练留个感受</text>
+      </view>
+    </view>
+    <view class="stage-grid">
+      <view wx:for="{{effortStages}}" wx:key="name" class="stage" style="background:{{item.color}}">
+        <text class="stage-name">{{item.name}}</text>
+        <text class="stage-range">{{item.from}}–{{item.to}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 一周安排 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">
+        <text class="t">一周安排</text>
+        <text class="d">撰写页第一天选的就是这套安排</text>
+      </view>
+    </view>
+    <view wx:for="{{planDays}}" wx:key="day" class="plan-day">
+      <view class="plan-day-text">
+        <text class="plan-day-label">{{item.label}}</text>
+        <text class="plan-day-name">{{item.name}} · {{item.count}} 个动作</text>
+        <text wx:if="{{item.names}}" class="plan-day-names">{{item.names}}{{item.count > 3 ? '…' : ''}}</text>
+      </view>
+      <button class="btn btn-sm btn-soft" data-day="{{item.day}}" bindtap="openPlanEdit">编辑</button>
+    </view>
+  </view>
+
+  <!-- 编辑动作 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">
+        <text class="t">编辑动作</text>
+        <text class="d">自己加的动作可以删，自带动作也能找回来</text>
+      </view>
+    </view>
+    <view wx:if="{{!customList.length}}" class="empty">还没有自己加的动作。</view>
+    <view wx:for="{{customList}}" wx:key="id" class="custom-row">
+      <view class="custom-text">
+        <text class="custom-name">{{item.name}}</text>
+        <text class="custom-group">{{item.group}}</text>
+      </view>
+      <text class="del-btn" data-id="{{item.id}}" bindtap="removeAction">去掉</text>
+    </view>
+    <view wx:if="{{hiddenCount}}" class="hidden-tip">已经从池子里去掉 {{hiddenCount}} 个自带动作。</view>
+    <view class="btn-row">
+      <button class="btn btn-ghost" bindtap="restoreBuiltin">恢复自带动作</button>
+      <button class="btn btn-soft" bindtap="openManage">删除自带动作</button>
+    </view>
+    <view class="btn-row">
+      <button class="btn btn-soft btn-block" bindtap="openAdd">＋ 新建动作</button>
+    </view>
+  </view>
+
+  <!-- 导入 / 导出 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-title">
+        <text class="t">导入 / 导出</text>
+        <text class="d">偏好打包成 JSON，电脑版 Repy 也认这份文件；记录可以整份带走</text>
+      </view>
+    </view>
+    <view class="btn-row">
+      <button class="btn btn-soft" bindtap="exportPrefs">导出偏好</button>
+      <button class="btn btn-ghost" bindtap="importPrefs">导入偏好</button>
+    </view>
+    <view class="btn-row">
+      <button class="btn btn-soft" bindtap="exportRecords">导出记录</button>
+      <button class="btn btn-ghost" bindtap="importRecords">导入记录</button>
+    </view>
+    <view class="btn-row">
+      <button class="btn btn-danger btn-block" bindtap="clearAllRecords">清空所有记录</button>
+    </view>
+    <view class="foot-tip">导出生成 JSON 发到文件传输助手；导入时从聊天记录里选文件。清空记录要确认两次，动作池和一周安排不受影响。</view>
+  </view>
+</view>
+
+<!-- 一周安排统一在撰写页的「改安排」里编辑，和桌面版同一套 -->
+
+<!-- 导入判重：保留还是覆盖 -->
+<view class="mask dialog-mask" wx:if="{{dupOpen}}" bindtap="cancelDup">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <view class="sheet-title-wrap">
+        <text class="sheet-title">有 {{dupCount}} 条你已经有了</text>
+        <text class="sheet-sub">编号或保存时刻跟现有的对上了，是同一条</text>
+      </view>
+      <text class="sheet-close" bindtap="cancelDup">×</text>
+    </view>
+    <view class="dup-body">
+      <text class="dup-line">这份文件一共 {{dupTotal}} 条记录。</text>
+      <text class="dup-line">保留：本地那条不动，只补新的。</text>
+      <text class="dup-line">覆盖：换成文件里的内容，记录编号不变。</text>
+    </view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="dupKeep">保留我这边的</button>
+      <button class="btn btn-main" bindtap="dupOver">用文件里的覆盖</button>
+    </view>
+  </view>
+</view>
+
+<!-- 新建动作 -->
+<view class="mask dialog-mask" wx:if="{{addOpen}}" bindtap="closeAdd">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <text class="sheet-title">新建一个动作</text>
+      <text class="sheet-close" bindtap="closeAdd">×</text>
+    </view>
+    <input class="fld wide" placeholder="动作名字" value="{{addName}}" bindinput="inputAddName" />
+    <view class="add-label">归到哪个部位</view>
+    <view class="add-groups">
+      <text wx:for="{{addGroups}}" wx:key="*this" class="add-group {{addGroup === item ? 'on' : ''}}" data-group="{{item}}" bindtap="pickAddGroup">{{item}}</text>
+    </view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="closeAdd">取消</button>
+      <button class="btn btn-main" bindtap="submitAdd">加进动作池</button>
+    </view>
+  </view>
+</view>
+
+<!-- 删除自带动作 -->
+<view class="mask dialog-mask" wx:if="{{manageOpen}}" bindtap="closeManage">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <view class="sheet-title-wrap">
+        <text class="sheet-title">删除自带动作</text>
+        <text class="sheet-sub">删掉的动作先收起来，「恢复自带动作」随时能找回</text>
+      </view>
+      <text class="sheet-close" bindtap="closeManage">×</text>
+    </view>
+    <view class="group-tabs">
+      <view wx:for="{{manageTabs}}" wx:key="key" class="group-tab {{item.active ? 'on' : ''}}" data-key="{{item.key}}" bindtap="setManageFilter">{{item.key}}</view>
+    </view>
+    <scroll-view class="sheet-body" scroll-y>
+      <view wx:if="{{!manageItems.length}}" class="empty">这个部位里没有自带动作。</view>
+      <view class="picker-list">
+        <view wx:for="{{manageItems}}" wx:key="id" class="picker-item">
+          <text class="picker-name">{{item.name}}</text>
+          <text class="picker-group">{{item.group}}{{item.cardio ? ' · 有氧' : ''}}</text>
+          <text class="del-btn" data-id="{{item.id}}" bindtap="removePoolAction">删除</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost btn-block" bindtap="closeManage">关掉</button>
+    </view>
+  </view>
+</view>
+
+<!-- 改一周安排：就地编辑，七天草稿一起保存 -->
+<view class="mask dialog-mask" wx:if="{{planEditOpen}}" bindtap="closePlanEdit">
+  <view class="dialog" catchtap="noop">
+    <view class="sheet-head">
+      <view class="sheet-title-wrap">
+        <text class="sheet-title">改一周安排</text>
+        <text class="sheet-sub">七天都能改，保存时一起写回</text>
+      </view>
+      <text class="sheet-close" bindtap="closePlanEdit">×</text>
+    </view>
+
+    <view class="plan-day-tabs">
+      <view wx:for="{{planEditTabs}}" wx:key="day" class="plan-day-tab {{item.active ? 'on' : ''}} {{item.isSet ? 'is-set' : ''}}" data-day="{{item.day}}" bindtap="pickPlanDay">
+        <text>{{item.label}}</text>
+        <text class="plan-day-count">{{item.count}}</text>
+      </view>
+    </view>
+
+    <input class="fld wide" placeholder="给这天起个名字，比如 下肢 A" value="{{planEditName}}" bindinput="inputPlanName" />
+    <view class="plan-tools">
+      <button class="btn btn-sm btn-soft" bindtap="togglePlanCopy">{{planCopyOpen ? '收起' : '照抄某天'}}</button>
+      <text class="plan-picked-count">已选 {{planEditPickedCount}} 个</text>
+    </view>
+    <view wx:if="{{planCopyOpen}}" class="plan-copy-menu">
+      <text class="plan-copy-lead">照抄到{{planEditLabel}}，连名称带动作一起搬过来</text>
+      <view class="plan-copy-grid">
+        <button wx:for="{{planCopyMenu}}" wx:key="day" class="btn btn-sm {{item.self ? 'btn-ghost' : 'btn-soft'}}" disabled="{{item.self}}" data-day="{{item.day}}" bindtap="copyPlanFrom">{{item.text}}</button>
+      </view>
+    </view>
+
+    <!-- 这天已经安排的动作：点一下移除，也能一键清空 -->
+    <view class="plan-picked">
+      <block wx:if="{{planEditPicked.length}}">
+        <view wx:for="{{planEditPicked}}" wx:key="id" class="picked-chip" style="background:{{item.tint}}" data-id="{{item.id}}" bindtap="removePlanPicked">
+          <text class="picked-idx">{{item.index}}</text>
+          <text class="picked-name">{{item.name}}</text>
+          <text class="picked-x">×</text>
+        </view>
+        <button class="btn btn-sm btn-danger" bindtap="clearPlanPicked">一键清空</button>
+      </block>
+      <text wx:else class="plan-picked-empty">这一天还没有动作，从下面挑几个。</text>
+    </view>
+
+    <input class="search" placeholder="搜动作名或别名" value="{{planEditSearch}}" bindinput="inputPlanSearch" confirm-type="search" />
+    <view class="group-tabs group-tabs-wrap">
+      <view wx:for="{{planEditGroupTabs}}" wx:key="key" class="group-tab {{item.active ? 'on' : ''}}" data-key="{{item.key}}" bindtap="setPlanFilter">{{item.key}}</view>
+    </view>
+    <scroll-view class="sheet-body" scroll-y>
+      <view wx:if="{{!planEditItems.length}}" class="empty">没有匹配的动作，换个关键词或部位。</view>
+      <view class="picker-list">
+        <view wx:for="{{planEditItems}}" wx:key="id" class="picker-item {{item.picked ? 'on' : ''}}" style="background:{{item.picked ? item.tint : '#fff'}}" data-id="{{item.id}}" bindtap="togglePlanItem">
+          <text class="picker-name">{{item.name}}</text>
+          <text class="picker-group">{{item.group}}{{item.cardio ? ' · 有氧' : ''}}</text>
+          <text class="picker-mark">{{item.picked ? '已选' : '＋'}}</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="sheet-foot">
+      <button class="btn btn-ghost" bindtap="closePlanEdit">取消</button>
+      <button class="btn btn-main" bindtap="savePlanEdit">保存安排</button>
+    </view>
+  </view>
+</view>

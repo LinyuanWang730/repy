@@ -1,0 +1,15 @@
+# Cloudflare Pages 的响应头规则。改完要重新部署才生效。
+
+# 在线版每次都要拿最新的：发版后用户刷新就该是新版
+/app/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 图片和图标一周内不用重复下载
+/assets/*
+  Cache-Control: public, max-age=604800
+
+# 其余（落地页本身）也走短缓存
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer-when-downgrade

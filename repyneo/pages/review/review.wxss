@@ -1,0 +1,467 @@
+.stat-card {
+  display: flex;
+  gap: 12rpx;
+}
+
+.stat {
+  flex: 1 1 0;
+  padding: 20rpx 8rpx;
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: var(--r);
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  color: var(--navy);
+  font-size: 44rpx;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 4rpx;
+  color: var(--ink2);
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.stat-tap:active {
+  background: #d6edfa;
+}
+
+.stat-hint {
+  margin: -10rpx 4rpx 20rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  line-height: 1.6;
+}
+
+.stat-card picker {
+  flex: 1 1 0;
+  min-width: 0;
+  display: block;
+}
+
+.stat-card picker .stat {
+  height: 100%;
+}
+
+.cal-foot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.cal-foot-tip {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+
+.cal-cell.sel {
+  color: #fff;
+  background: var(--navy);
+}
+
+.cal-cell.sel .dot {
+  background: #fff;
+}
+
+.empty-card {
+  text-align: center;
+}
+
+.empty-title {
+  color: var(--ink);
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.empty-desc {
+  margin-top: 10rpx;
+  color: var(--muted);
+  font-size: 23rpx;
+  line-height: 1.7;
+}
+
+.rec-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.rec-time {
+  color: var(--ink2);
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.rec-eff {
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+  color: #fff;
+  font-size: 21rpx;
+  font-weight: 800;
+}
+
+.del-btn {
+  margin-left: auto;
+  padding: 6rpx 16rpx;
+  color: var(--red);
+  background: #fff;
+  border: 1rpx solid #f0c7c4;
+  border-radius: 12rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.del-btn:active {
+  background: #fdf0ef;
+}
+
+.rec-text {
+  padding: 18rpx 20rpx;
+  color: var(--ink);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 24rpx;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.rec-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 16rpx;
+}
+
+.rec-item {
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+/* ---------- 记录条：按动作分组（参照桌面版） ---------- */
+.rec-block {
+  margin-top: 14rpx;
+  padding: 16rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.rec-block.is-key {
+  border-color: var(--sky-deep);
+}
+
+.rec-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 12rpx;
+}
+
+.rec-name-btn {
+  color: var(--name-ink);
+  font-size: 27rpx;
+  font-weight: 900;
+}
+
+.rec-name-btn:active {
+  color: var(--sky-deep);
+}
+
+.rec-part {
+  padding: 4rpx 14rpx;
+  color: var(--part-ink);
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.key-tag {
+  margin-left: auto;
+  padding: 6rpx 14rpx;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.key-tag i {
+  font-style: normal;
+  margin-left: 6rpx;
+}
+
+.key-add {
+  margin-left: auto;
+  padding: 6rpx 14rpx;
+  color: var(--navy);
+  background: #fff;
+  border: 1rpx dashed var(--sky-deep);
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.key-add:active {
+  background: var(--sky-soft);
+}
+
+.rec-load-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.rec-load-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.rec-load-val {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 14rpx 18rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: 14rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.rec-load-val:active {
+  background: var(--sky-soft);
+}
+
+.rec-load-note {
+  color: var(--muted);
+  font-size: 21rpx;
+}
+
+.rec-load-del {
+  flex: none;
+  width: 52rpx;
+  height: 52rpx;
+  color: var(--red);
+  background: #fff;
+  border: 1rpx solid #f0c7c4;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  line-height: 48rpx;
+  text-align: center;
+}
+
+.rec-load-del:active {
+  background: #fdf0ef;
+}
+
+/* ---------- 弹窗共用控件 ---------- */
+.group-tabs {
+  display: flex;
+  gap: 10rpx;
+  margin: 0 0 16rpx;
+  white-space: nowrap;
+}
+
+.group-tab {
+  flex: none;
+  padding: 10rpx 22rpx;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.group-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.group-tab:active {
+  background: var(--sky-soft);
+}
+
+.sheet-body {
+  max-height: 44vh;
+}
+
+/* ---------- 改重量弹窗 ---------- */
+.sheet-title-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sheet-sub {
+  display: block;
+  margin-top: 4rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  font-weight: 600;
+}
+
+.le-block {
+  margin-bottom: 16rpx;
+  padding: 16rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.le-line {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.le-label {
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.le-mode {
+  margin-left: auto;
+  padding: 8rpx 16rpx;
+  color: var(--ink2);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: 14rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.le-mode:active {
+  background: var(--sky-soft);
+}
+
+.each,
+.step,
+.unit {
+  flex: none;
+  padding: 8rpx 16rpx;
+  color: var(--ink2);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.each:active,
+.step:active,
+.unit:active {
+  background: var(--sky-soft);
+}
+
+.each.on,
+.unit.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.sets-num {
+  min-width: 40rpx;
+  color: var(--ink);
+  font-size: 26rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
+.le-reps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 12rpx;
+}
+
+.fld.rep {
+  flex: 0 0 96rpx;
+  min-width: 96rpx;
+  text-align: center;
+}
+
+.unit-tabs {
+  display: flex;
+  gap: 8rpx;
+}
+
+.seg-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.seg-index {
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.le-note {
+  margin-top: 4rpx;
+}
+
+/* ---------- 补记录模式 ---------- */
+.cal-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.cal-cell.can-fill {
+  background: #f5fbf6;
+  border: 1rpx solid #d5e9da;
+}
+
+.cal-cell.can-fill:active {
+  background: #e6f5ea;
+}
+
+.cal-cell.target {
+  box-shadow: inset 0 0 0 3rpx rgba(46, 125, 79, 0.45);
+}
+
+/* ---------- 日历头部：年月不换行 ---------- */
+/* 年月是一整块，永远占满自己那一格；挤不下时压按钮，不压标题 */
+.cal-head .cal-title {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* 「补记录 / 取消补记」收窄：少留白、字号收一点，让出年月的空间 */
+.cal-head-actions {
+  flex: 0 0 auto;
+  gap: 8rpx;
+}
+
+.cal-head-actions .bf-btn {
+  flex: 0 0 auto;
+  padding: 0 12rpx;
+  font-size: 22rpx;
+  letter-spacing: 0;
+}

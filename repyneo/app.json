@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/write/write",
+    "pages/review/review",
+    "pages/trend/trend",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarTitleText": "RepyNeo",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2f8fc",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#7a95ac",
+    "selectedColor": "#1d5fa8",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/write/write",
+        "text": "撰写",
+        "iconPath": "assets/tab/write.png",
+        "selectedIconPath": "assets/tab/write-on.png"
+      },
+      {
+        "pagePath": "pages/review/review",
+        "text": "复盘",
+        "iconPath": "assets/tab/review.png",
+        "selectedIconPath": "assets/tab/review-on.png"
+      },
+      {
+        "pagePath": "pages/trend/trend",
+        "text": "趋势",
+        "iconPath": "assets/tab/trend.png",
+        "selectedIconPath": "assets/tab/trend-on.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置",
+        "iconPath": "assets/tab/settings.png",
+        "selectedIconPath": "assets/tab/settings-on.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

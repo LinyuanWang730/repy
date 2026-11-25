@@ -1,0 +1,561 @@
+/* RepyNeo · 与桌面版同一套浅蓝（JR0） */
+page {
+  --paper: #f2f8fc;
+  --card: #ffffff;
+  --card2: #f3f8fc;
+  --ink: #173a5e;
+  --ink2: #3f6183;
+  --muted: #7a95ac;
+  --rule: #c9dce9;
+  --faint: #93aabd;
+  --navy: #1d5fa8;
+  --sky: #8fd3f4;
+  --sky-soft: #e6f5fd;
+  --sky-line: #b6ddf2;
+  --sky-deep: #2b8fd6;
+  --green: #008b68;
+  --red: #df4c43;
+  --r: 24rpx;
+  /* 动作名 / 训练部位一律深灰，不用部位索引色 */
+  --name-ink: #39434e;
+  --part-ink: #4d5863;
+
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 30rpx;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+input,
+textarea,
+button,
+scroll-view {
+  box-sizing: border-box;
+}
+
+button {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: var(--r);
+}
+
+button::after {
+  border: none;
+}
+
+.page-wrap {
+  padding: 24rpx 24rpx 48rpx;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  margin-bottom: 24rpx;
+  padding: 28rpx 26rpx;
+  background: var(--card);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  box-shadow: 0 8rpx 24rpx rgba(23, 69, 110, 0.05);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 18rpx;
+}
+
+.sec-num {
+  flex: none;
+  padding: 2rpx 12rpx;
+  color: var(--navy);
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.card-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.card-title .t {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.card-title .d {
+  display: block;
+  margin-top: 4rpx;
+  color: var(--muted);
+  font-size: 22rpx;
+  line-height: 1.55;
+}
+
+/* 卡头里的按钮只占文字那么宽，别把标题挤掉半行 */
+.card-head > .btn {
+  flex: none;
+  width: auto;
+  margin: 0;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80rpx;
+  padding: 0 26rpx;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  color: var(--navy);
+  background: #fff;
+  font-size: 26rpx;
+  font-weight: 700;
+  transition: background-color 0.14s ease, transform 0.1s ease;
+}
+
+.btn:active {
+  transform: translateY(1rpx);
+  background: var(--sky-soft);
+}
+
+.btn-main {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.btn-main:active {
+  background: #174e8c;
+}
+
+.btn-soft {
+  color: var(--navy);
+  background: var(--sky-soft);
+  border-color: var(--sky-line);
+}
+
+.btn-ghost {
+  color: var(--ink2);
+  background: #fff;
+}
+
+.btn-danger {
+  color: var(--red);
+  background: #fff;
+  border-color: #f0c7c4;
+}
+
+.btn-sm {
+  min-height: 60rpx;
+  padding: 0 20rpx;
+  font-size: 24rpx;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn[disabled] {
+  color: var(--faint);
+  background: var(--card2);
+  border-color: var(--rule);
+}
+
+/* ---------- 小零件 ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 4rpx 14rpx;
+  color: var(--part-ink);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.divider {
+  height: 1rpx;
+  margin: 18rpx 0;
+  background: var(--rule);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.empty {
+  padding: 48rpx 24rpx;
+  color: var(--faint);
+  font-size: 24rpx;
+  text-align: center;
+}
+
+/* ---------- 弹层 ---------- */
+.mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 900;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(20, 48, 78, 0.42);
+}
+
+.sheet {
+  width: 100%;
+  max-height: 84vh;
+  padding: 28rpx 24rpx calc(28rpx + env(safe-area-inset-bottom));
+  background: var(--card);
+  border-radius: 32rpx 32rpx 0 0;
+  overflow: hidden;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.sheet-title {
+  font-size: 32rpx;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.sheet-close {
+  width: 60rpx;
+  height: 60rpx;
+  color: var(--muted);
+  font-size: 40rpx;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.sheet-body {
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.sheet-foot {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.sheet-foot .btn {
+  flex: 1 1 0;
+}
+
+/* 居中弹窗（导入预览这类） */
+.dialog-mask {
+  align-items: center;
+  padding: 40rpx;
+}
+
+.dialog {
+  width: 100%;
+  max-height: 82vh;
+  padding: 32rpx 28rpx;
+  background: var(--card);
+  border-radius: var(--r);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ---------- 顶部：机器人 + 日历按钮 ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  min-height: 208rpx;
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background: var(--card);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  box-shadow: 0 8rpx 24rpx rgba(23, 69, 110, 0.05);
+}
+
+.bot-avatar {
+  flex: none;
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 28rpx;
+  background: var(--sky-soft);
+}
+
+.bot-bubble {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 22rpx 26rpx;
+  color: var(--ink);
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: 20rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.page-title {
+  margin: 6rpx 0 24rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- 日历弹窗 ---------- */
+.cal-dialog {
+  max-width: 660rpx;
+}
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 18rpx;
+}
+
+.cal-title {
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.cal-nav {
+  display: flex;
+  gap: 10rpx;
+}
+
+.cal-nav .n {
+  width: 60rpx;
+  min-height: 56rpx;
+  color: var(--navy);
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  line-height: 56rpx;
+  text-align: center;
+}
+
+.cal-nav .n:active {
+  background: #d6edfa;
+}
+
+.cal-week,
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+}
+
+.cal-week {
+  margin-bottom: 8rpx;
+}
+
+.cal-week text {
+  color: var(--muted);
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.cal-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  height: 76rpx;
+  color: var(--ink2);
+  border-radius: 16rpx;
+  font-size: 24rpx;
+}
+
+.cal-cell.blank {
+  background: transparent;
+}
+
+.cal-cell.has {
+  background: var(--sky-soft);
+}
+
+.cal-cell.today {
+  border: 2rpx solid var(--sky-deep);
+}
+
+.cal-cell .dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 999rpx;
+}
+
+.cal-cell:active {
+  background: #d6edfa;
+}
+
+.cal-foot {
+  margin-top: 18rpx;
+  color: var(--muted);
+  font-size: 22rpx;
+  text-align: center;
+}
+
+/* ---------- 全站共用的弹窗小部件 ---------- */
+.btn-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+
+.btn-row .btn {
+  flex: 1 1 0;
+}
+
+.fld {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 64rpx;
+  padding: 0 18rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: 16rpx;
+  font-size: 25rpx;
+}
+
+.fld.wide {
+  width: 100%;
+  margin-bottom: 12rpx;
+}
+
+.add-label {
+  display: block;
+  width: 100%;
+  margin: 18rpx 0 12rpx;
+  color: var(--muted);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.add-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.add-group {
+  flex: none;
+  padding: 8rpx 16rpx;
+  color: var(--ink2);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.add-group:active {
+  background: var(--sky-soft);
+}
+
+.add-group.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.picker-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-height: 76rpx;
+  padding: 12rpx 18rpx;
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.picker-item.on {
+  border-color: var(--sky-deep);
+}
+
+.picker-item:active {
+  background: var(--sky-soft);
+}
+
+.picker-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--name-ink);
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.picker-group {
+  color: var(--part-ink);
+  font-size: 21rpx;
+}
+
+.picker-mark {
+  flex: none;
+  min-width: 60rpx;
+  color: var(--navy);
+  font-size: 22rpx;
+  font-weight: 800;
+  text-align: right;
+}
+
+.del-btn {
+  flex: none;
+  margin-left: auto;
+  padding: 6rpx 16rpx;
+  color: var(--red);
+  background: #fff;
+  border: 1rpx solid #f0c7c4;
+  border-radius: 12rpx;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.del-btn:active {
+  background: #fdf0ef;
+}

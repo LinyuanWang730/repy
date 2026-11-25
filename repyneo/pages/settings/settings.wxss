@@ -1,0 +1,408 @@
+.about-card {
+  background: var(--sky-soft);
+  border-color: var(--sky-line);
+}
+
+.about-name {
+  color: var(--navy);
+  font-size: 36rpx;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.about-ver {
+  margin-left: 10rpx;
+  padding: 2rpx 14rpx;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  font-weight: 800;
+  vertical-align: middle;
+}
+
+.about-desc {
+  margin-top: 10rpx;
+  color: var(--ink2);
+  font-size: 23rpx;
+  line-height: 1.7;
+}
+
+.set-row,
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--rule);
+}
+
+.set-row:last-of-type,
+.preset-row:last-of-type {
+  border-bottom: none;
+}
+
+.set-row-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.set-name {
+  display: block;
+  color: var(--ink);
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.set-desc {
+  display: block;
+  margin-top: 2rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  line-height: 1.55;
+}
+
+.preset-input {
+  flex: 0 0 200rpx;
+  min-height: 64rpx;
+  padding: 0 16rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.picker-value {
+  min-width: 200rpx;
+  padding: 12rpx 16rpx;
+  color: var(--navy);
+  background: var(--sky-soft);
+  border: 1rpx solid var(--sky-line);
+  border-radius: 16rpx;
+  font-size: 23rpx;
+  font-weight: 700;
+  text-align: center;
+}
+
+.stage-grid {
+  display: flex;
+  gap: 12rpx;
+}
+
+.stage {
+  flex: 1 1 0;
+  padding: 16rpx 8rpx;
+  border-radius: var(--r);
+  text-align: center;
+}
+
+.stage-name {
+  display: block;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.stage-range {
+  display: block;
+  margin-top: 2rpx;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.plan-day,
+.custom-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--rule);
+}
+
+.plan-day:last-child,
+.custom-row:last-child {
+  border-bottom: none;
+}
+
+.plan-day-text,
+.custom-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.plan-day-label {
+  display: block;
+  color: var(--ink);
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.plan-day-name {
+  display: block;
+  margin-top: 2rpx;
+  color: var(--ink2);
+  font-size: 22rpx;
+}
+
+.plan-day-names {
+  display: block;
+  margin-top: 2rpx;
+  color: var(--part-ink);
+  font-size: 20rpx;
+}
+
+.custom-name {
+  display: block;
+  color: var(--name-ink);
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.custom-group {
+  display: block;
+  margin-top: 2rpx;
+  color: var(--part-ink);
+  font-size: 21rpx;
+}
+
+.hidden-tip {
+  padding: 14rpx 0;
+  color: var(--muted);
+  font-size: 22rpx;
+}
+
+/* 导入导出说明 */
+.foot-tip {
+  margin-top: 16rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  line-height: 1.7;
+}
+
+/* 弹窗共用：部位筛选条 + 弹窗标题副行 */
+.group-tabs {
+  display: flex;
+  gap: 10rpx;
+  margin: 0 0 16rpx;
+  white-space: nowrap;
+}
+
+.group-tab {
+  flex: none;
+  padding: 10rpx 22rpx;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+.group-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.group-tab:active {
+  background: var(--sky-soft);
+}
+
+.sheet-title-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sheet-sub {
+  display: block;
+  margin-top: 4rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  font-weight: 600;
+}
+
+.sheet-body {
+  max-height: 46vh;
+}
+
+/* ---------- 改一周安排：就地编辑弹窗 ---------- */
+.search {
+  margin-top: 18rpx;
+  min-height: 72rpx;
+  padding: 0 22rpx;
+  color: var(--ink);
+  background: #fff;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 26rpx;
+}
+
+/* 内容多时整体仍可滚动，保证底部「保存安排」不会被裁掉 */
+.dialog {
+  overflow-y: auto;
+}
+
+.plan-day-tabs {
+  display: flex;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.plan-day-tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rpx 0;
+  color: var(--ink2);
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+  font-size: 23rpx;
+  font-weight: 700;
+}
+
+/* 有安排的那天，给个能看见的小标记 */
+.plan-day-tab.is-set:not(.on) {
+  border-color: var(--sky-deep);
+  background: var(--sky-soft);
+}
+
+.plan-day-tab.on {
+  color: #fff;
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+.plan-day-count {
+  font-size: 20rpx;
+  color: var(--muted);
+}
+
+.plan-day-tab.on .plan-day-count {
+  color: #cfe6fb;
+}
+
+.plan-day-tab:active {
+  background: var(--sky-soft);
+}
+
+.plan-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.plan-picked-count {
+  color: var(--ink2);
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.plan-copy-menu {
+  margin-bottom: 16rpx;
+  padding: 16rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.plan-copy-lead {
+  display: block;
+  margin-bottom: 12rpx;
+  color: var(--muted);
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.plan-copy-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.plan-copy-grid .btn {
+  flex: 0 0 auto;
+  min-width: 120rpx;
+}
+
+.plan-picked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+  padding: 14rpx;
+  background: var(--card2);
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.picked-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 14rpx;
+  border: 1rpx solid var(--rule);
+  border-radius: var(--r);
+}
+
+.picked-chip:active {
+  border-color: var(--sky-deep);
+}
+
+.picked-idx {
+  color: var(--part-ink);
+  font-size: 20rpx;
+  font-weight: 800;
+}
+
+.picked-name {
+  color: var(--name-ink);
+  font-size: 23rpx;
+  font-weight: 800;
+}
+
+.picked-x {
+  color: var(--red);
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.plan-picked-empty {
+  color: var(--muted);
+  font-size: 22rpx;
+}
+
+.plan-picked .btn {
+  flex: none;
+}
+
+/* 部位选项卡放不下时折行，不横向裁字 */
+.group-tabs-wrap {
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+.sheet-body {
+  max-height: 34vh;
+}
+
+/* 导入判重：保留还是覆盖 */
+.dup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  padding: 6rpx 0 22rpx;
+}
+
+.dup-line {
+  font-size: 25rpx;
+  line-height: 1.7;
+  color: var(--ink2);
+}

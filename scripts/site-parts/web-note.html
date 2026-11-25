@@ -1,0 +1,70 @@
+<!-- ── 在线试用版的说明（只有站点里的在线版才有，桌面版不包含这段） ──
+     样式类名统一 wn- 前缀，避免和 App 自己的 .card / .notice 撞车。
+     关掉一次就不再弹（localStorage），每个新访客第一次进来都会看到。 -->
+<style>
+.wn{
+  position:fixed;right:20px;bottom:20px;z-index:9000;
+  width:min(330px,calc(100vw - 32px));
+  background:#fff;
+  border:1px solid #b6ddf2;
+  border-radius:14px;
+  box-shadow:0 8px 28px rgba(23,69,110,.16);
+  padding:16px 16px 14px;
+  font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+  animation:wnIn .32s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes wnIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wn[hidden]{display:none}
+.wn-x{
+  position:absolute;top:8px;right:8px;
+  width:26px;height:26px;display:grid;place-items:center;
+  border:0;border-radius:8px;background:transparent;
+  color:#93aabd;cursor:pointer;
+  transition:background .16s,color .16s;
+}
+.wn-x:hover{background:#e6f5fd;color:#1d5fa8}
+.wn-x:active{background:#b6ddf2}
+.wn-t{
+  font-size:14px;font-weight:700;color:#173a5e;
+  margin:0 0 6px;display:flex;align-items:center;gap:7px;
+}
+.wn-dot{width:7px;height:7px;border-radius:50%;background:#2b8fd6;flex:0 0 auto}
+.wn-p{margin:0;font-size:13px;line-height:1.65;color:#54718d}
+.wn-p b{color:#173a5e;font-weight:600}
+.wn-a{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:11px;padding:7px 13px;
+  font-size:13px;font-weight:600;
+  color:#fff;background:#1d5fa8;
+  border-radius:10px;
+  text-decoration:none;
+  transition:background .16s,transform .12s;
+}
+.wn-a:hover{background:#2b8fd6;color:#fff}
+.wn-a:active{transform:translateY(1px)}
+@media (max-width:520px){.wn{right:10px;bottom:10px;padding:14px}}
+</style>
+
+<div class="wn" id="wn" hidden>
+  <button class="wn-x" type="button" id="wnX" aria-label="关闭">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+  </button>
+  <p class="wn-t"><span class="wn-dot"></span>在线试用版</p>
+  <p class="wn-p">你现在用的这个，记录存在<b>这台电脑的浏览器</b>里，换电脑或清缓存就没了。想要存档文件、能导出导入、能给 AI 读，装桌面版。</p>
+  <a class="wn-a" href="../">去下载桌面版</a>
+</div>
+
+<script>
+(function(){
+  try{
+    if (localStorage.getItem("repy-web-note-dismissed") === "1") return;
+    var box = document.getElementById("wn");
+    if (!box) return;
+    box.hidden = false;
+    document.getElementById("wnX").addEventListener("click", function(){
+      box.hidden = true;
+      try{ localStorage.setItem("repy-web-note-dismissed","1"); }catch(e){}
+    });
+  }catch(e){}
+})();
+</script>

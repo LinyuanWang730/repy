@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Repy · 撰写与复盘，训练记录桌面版</title>
+<meta name="description" content="Repy 是给自己用的训练记录工具。先选星期，再排动作，点一下就记完。数据全存在你自己电脑上。">
+<meta property="og:title" content="Repy · 训练记录桌面版">
+<meta property="og:description" content="先选星期，再排动作，点一下就记完。数据全存在你自己电脑上。">
+<meta property="og:image" content="assets/shot-overview.jpg">
+<meta name="theme-color" content="#f2f8fc">
+<link rel="icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" href="assets/icon-256.png">
+<style>
+/* ── JR0 浅蓝主题，变量与 App 的 src/index.html 里 :root 保持一致 ── */
+:root{
+  --paper:#f2f8fc;
+  --card:#ffffff;
+  --card2:#f3f8fc;
+  --ink:#173a5e;
+  --ink2:#3f6183;
+  --muted:#54718d;
+  --rule:#c9dce9;
+  --faint:#93aabd;
+  --navy:#1d5fa8;
+  --blue:#2b8fd6;
+  --sky:#8fd3f4;
+  --sky-soft:#e6f5fd;
+  --sky-line:#b6ddf2;
+  --shadow:0 8px 24px rgba(23,69,110,.09);
+  --r:14px;
+  --font:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--font);
+  background:var(--paper);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--navy);text-decoration:none}
+a:hover{color:var(--blue)}
+img{max-width:100%;display:block}
+h1,h2,h3{margin:0;line-height:1.35}
+p{margin:0}
+
+.wrap{max-width:880px;margin:0 auto;padding:0 24px 72px}
+
+/* ── 顶栏 ── */
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:22px 0 8px;
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:34px;height:34px;border-radius:9px;box-shadow:0 2px 8px rgba(23,69,110,.14)}
+.brand-name{font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.ver{
+  font-size:12px;font-weight:600;color:var(--navy);
+  background:var(--sky-soft);border:1px solid var(--sky-line);
+  padding:2px 9px;border-radius:8px;letter-spacing:.02em;
+}
+.top-nav{display:flex;gap:4px}
+.top-nav a{
+  font-size:14px;color:var(--ink2);padding:7px 12px;border-radius:10px;
+  transition:background .16s,color .16s;
+}
+.top-nav a:hover{background:var(--sky-soft);color:var(--navy)}
+.top-nav a:active{background:var(--sky-line)}
+
+/* ── 首屏 ── */
+.hero{padding:44px 0 34px}
+.hero h1{
+  font-size:35px;font-weight:800;letter-spacing:-.02em;
+  color:#0f3c68;margin-bottom:14px;
+}
+.hero p{font-size:16px;color:var(--muted);max-width:34em}
+.br-d{display:inline}
+
+/* ── 下载区 ── */
+.sec-head{
+  display:flex;align-items:baseline;gap:12px;
+  margin:0 0 14px;padding:0 2px;
+}
+.sec-head h2{font-size:17px;font-weight:700;color:var(--ink)}
+.sec-head .hint{font-size:13px;color:var(--faint)}
+
+.dl-list{display:flex;flex-direction:column;gap:10px}
+
+.dl-row{
+  display:flex;align-items:center;gap:15px;
+  padding:15px 18px;
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:var(--r);
+  color:inherit;
+  transition:border-color .16s,background .16s,box-shadow .16s,transform .16s;
+}
+.dl-row:hover{
+  border-color:var(--sky-line);
+  background:var(--card2);
+  box-shadow:var(--shadow);
+  transform:translateY(-1px);
+  color:inherit;
+}
+.dl-row:active{transform:translateY(0);background:var(--sky-soft);box-shadow:none}
+.dl-row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.dl-row.main{
+  background:var(--sky-soft);
+  border-color:var(--sky-line);
+}
+.dl-row.main:hover{background:#dcf0fb;border-color:var(--sky)}
+
+.dl-ico{
+  flex:0 0 38px;height:38px;
+  display:grid;place-items:center;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid var(--rule);
+  color:var(--navy);
+}
+.dl-row.main .dl-ico{background:#fff;border-color:var(--sky-line)}
+.dl-ico svg{width:20px;height:20px;display:block}
+
+.dl-text{flex:1 1 auto;min-width:0}
+.dl-name{
+  display:flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:700;color:var(--ink);
+  margin-bottom:2px;
+}
+.tag{
+  font-size:11px;font-weight:600;
+  color:#0f6e56;background:#e1f5ee;border:1px solid #9fe1cb;
+  padding:1px 7px;border-radius:6px;letter-spacing:.02em;
+}
+.dl-desc{font-size:13px;color:var(--muted);line-height:1.55}
+.dl-size{
+  flex:0 0 auto;font-size:13px;font-weight:600;color:var(--ink2);
+  font-variant-numeric:tabular-nums;
+}
+.dl-go{
+  flex:0 0 auto;color:var(--faint);
+  transition:color .16s,transform .16s;
+}
+.dl-go svg{width:16px;height:16px;display:block}
+.dl-row:hover .dl-go{color:var(--blue);transform:translateX(2px)}
+
+.dl-foot{
+  display:flex;flex-wrap:wrap;gap:6px 14px;
+  margin-top:14px;padding:0 2px;
+  font-size:13px;color:var(--faint);
+}
+.dl-foot a{font-weight:600}
+
+/* ── 截图 ── */
+.shots{display:grid;gap:14px;margin:38px 0 0}
+.shots figure{margin:0}
+.shots img{
+  border-radius:var(--r);
+  border:1px solid var(--rule);
+  box-shadow:var(--shadow);
+  width:100%;
+}
+.shots figcaption{
+  font-size:12px;color:var(--faint);
+  padding:9px 4px 0;
+}
+
+/* ── 通用卡片 ── */
+.card{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:var(--r);
+  padding:24px 26px;
+  margin-top:38px;
+}
+.card h2{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.card > p.lead{font-size:14px;color:var(--muted);margin-bottom:18px}
+
+/* ── 安装说明 ── */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.steps li{display:flex;gap:13px;align-items:flex-start}
+.steps .n{
+  flex:0 0 24px;height:24px;margin-top:1px;
+  display:grid;place-items:center;
+  border-radius:8px;
+  background:var(--sky-soft);
+  border:1px solid var(--sky-line);
+  color:var(--navy);
+  font-size:12px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+.steps b{color:var(--ink);font-weight:700}
+.steps .body{font-size:14px;color:var(--muted);line-height:1.65}
+.steps .body b{color:var(--ink)}
+
+/* ── 更新日志 ── */
+.log{border-top:1px solid var(--rule)}
+.log:first-of-type{border-top:0}
+.log summary{
+  display:flex;align-items:center;gap:10px;
+  padding:15px 2px;
+  cursor:pointer;
+  list-style:none;
+  transition:color .16s;
+}
+.log summary::-webkit-details-marker{display:none}
+.log summary:hover{color:var(--blue)}
+.log summary:hover .log-ver{color:var(--blue)}
+.log-ver{font-size:14px;font-weight:700;color:var(--ink);transition:color .16s}
+.log-date{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.log-new{
+  font-size:11px;font-weight:600;color:#0f6e56;
+  background:#e1f5ee;border:1px solid #9fe1cb;
+  padding:1px 7px;border-radius:6px;
+}
+.log-caret{
+  margin-left:auto;color:var(--faint);
+  transition:transform .18s;
+}
+.log-caret svg{width:14px;height:14px;display:block}
+.log[open] .log-caret{transform:rotate(90deg)}
+.log ul{margin:0 0 18px;padding:0 0 0 4px;list-style:none;display:grid;gap:9px}
+.log li{
+  position:relative;padding-left:16px;
+  font-size:14px;color:var(--muted);line-height:1.7;
+}
+.log li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:5px;height:5px;border-radius:50%;
+  background:var(--sky-line);
+}
+.log li b{color:var(--ink);font-weight:700}
+
+/* ── 页脚 ── */
+.foot{
+  margin-top:46px;padding-top:22px;
+  border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between;
+  font-size:13px;color:var(--faint);
+}
+
+/* ── 窄屏 ── */
+@media (max-width:640px){
+  .wrap{padding:0 16px 56px}
+  .top{padding:16px 0 4px}
+  .top-nav{display:none}
+  .hero{padding:30px 0 26px}
+  .hero h1{font-size:26px}
+  .hero p{font-size:15px}
+  .br-d{display:none}
+  .card{padding:20px;margin-top:28px}
+
+  /* 下载行换成两行网格：图标跨两行，第一行「名称 + 大小」，第二行描述占满 */
+  .dl-row{
+    display:grid;
+    grid-template-columns:32px minmax(0,1fr) auto;
+    grid-template-areas:"ico name size" "ico desc desc";
+    column-gap:11px;row-gap:3px;
+    align-items:center;
+    padding:13px 14px;
+  }
+  .dl-ico{grid-area:ico;flex:none;width:32px;height:32px}
+  .dl-text{display:contents}
+  .dl-name{grid-area:name;margin-bottom:0}
+  .dl-desc{grid-area:desc;display:block;font-size:12.5px}
+  .dl-size{grid-area:size;font-size:12px}
+  .dl-go{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <img src="assets/icon-256.png" alt="">
+      <span class="brand-name">Repy</span>
+      <span class="ver" data-site-ver>V2.1.2</span>
+    </div>
+    <nav class="top-nav">
+      <a href="#download">下载</a>
+      <a href="#install">安装</a>
+      <a href="#notes">更新日志</a>
+      <a href="app/">在线试用</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>撰写与复盘，<br>训练记录桌面版</h1>
+    <p>先选星期，再排动作，点一下就记完。<br class="br-d">数据全存在你自己电脑上，不上传、不用注册。</p>
+  </section>
+
+  <section id="download">
+    <div class="sec-head">
+      <h2>下载</h2>
+      <span class="hint">Windows 10 / 11 · 64 位</span>
+    </div>
+
+    <div class="dl-list">
+
+      <a class="dl-row main" href="https://github.com/YUANZI/repy-downloads/releases/latest/download/Repy-Setup.exe">
+        <span class="dl-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3.5v10"/><path d="M8 10l4 4 4-4"/><path d="M4.5 16.5v2.2A1.8 1.8 0 0 0 6.3 20.5h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.2"/>
+          </svg>
+        </span>
+        <span class="dl-text">
+          <span class="dl-name">安装版<span class="tag">推荐</span></span>
+          <span class="dl-desc">装进本机，开始菜单和桌面都有图标，之后可以从设置里卸载</span>
+        </span>
+        <span class="dl-size" data-size="setup">79 MB</span>
+        <span class="dl-go">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <a class="dl-row" href="https://github.com/YUANZI/repy-downloads/releases/latest/download/Repy-Portable.exe">
+        <span class="dl-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M3.5 12.5h17"/>
+          </svg>
+        </span>
+        <span class="dl-text">
+          <span class="dl-name">便携版</span>
+          <span class="dl-desc">不用安装，双击就跑；放 U 盘里带走，换台电脑照样用</span>
+        </span>
+        <span class="dl-size" data-size="portable">71 MB</span>
+        <span class="dl-go">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <a class="dl-row" href="https://github.com/YUANZI/repy-downloads/releases/latest/download/Repy-Portable.zip">
+        <span class="dl-ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4.5" y="3.5" width="15" height="17" rx="2"/><path d="M10 3.5v2m4-2v2m-4 2v2m4-2v2m-4 2v2m4-2v2"/>
+          </svg>
+        </span>
+        <span class="dl-text">
+          <span class="dl-name">绿色版压缩包</span>
+          <span class="dl-desc">浏览器拦住 exe 下载时用这个，解压出来是同一个便携版</span>
+        </span>
+        <span class="dl-size" data-size="zip">71 MB</span>
+        <span class="dl-go">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+    <div class="dl-foot">
+      <span>macOS 版暂时没有。</span>
+      <span>不想装东西？<a href="app/">直接在浏览器里试用</a></span>
+    </div>
+  </section>
+
+  <section class="shots">
+    <figure>
+      <img src="assets/shot-overview.jpg" alt="复盘页：日历上按天查看记录，右边是当天练的动作">
+      <figcaption>复盘：按天翻记录，哪天练过一眼就看出来</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/shot-generator.jpg" alt="撰写页：先选星期，再按安排加动作">
+      <figcaption>撰写：先选星期，安排好的动作直接点加号</figcaption>
+    </figure>
+  </section>
+
+  <section class="card" id="install">
+    <h2>装的时候会弹一次警告</h2>
+    <p class="lead">这个应用没有买数字签名证书，所以 Windows 会拦一下。不是病毒，点过去就行。</p>
+    <ol class="steps">
+      <li>
+        <span class="n">1</span>
+        <span class="body">双击安装包，出现蓝色的<b>「Windows 已保护你的电脑」</b>窗口。</span>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <span class="body">点左边的<b>「更多信息」</b>，展开后底部会出现<b>「仍要运行」</b>，点它。</span>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <span class="body">之后按提示下一步到底。装完桌面上就有 Repy，双击打开。</span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="card" id="notes">
+    <h2>更新日志</h2>
+    <p class="lead">每版的改动和 Repy 自己说的话，装好以后在应用里也能翻。</p>
+
+    <!-- RELEASES:BEGIN 这段由 npm run site:sync 从 src/index.html 的 RELEASES 生成，别手改 -->
+    <details class="log" open>
+      <summary>
+        <span class="log-ver">V2.1.2</span>
+        <span class="log-date">2026.11.25</span>
+        <span class="log-new">最新</span>
+        <span class="log-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary>
+      <ul>
+        <li><b>导入先去重</b>：同一份 JSON 连导两次，不会再叠出两条一样的记录。发现同一条会先问你——保留我这边的，还是用文件里的覆盖。</li>
+        <li><b>备份往返不认生</b>：Repy 自己导出的备份再导回来，记录编号和保存时刻都对得上，强度和补记标记也不再丢。</li>
+        <li><b>偏好只补不抹</b>：导入偏好时，手机上独有的自建动作会留下来，只把缺的补上。</li>
+      </ul>
+    </details>
+
+    <details class="log">
+      <summary>
+        <span class="log-ver">V2.1.1</span>
+        <span class="log-date">2026.11.24</span>
+        <span class="log-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary>
+      <ul>
+        <li>RepyNeo，现已推出。</li>
+        <li><b>新部位「腹/核心」</b>，被遗忘的他们，终于来了，索引色是浅红。腹部的事情，也要认真对待啊。</li>
+        <li><b>有氧运动</b>：跑步、爬楼等等，目前可以一并收录进 Repy 中。记录方式和力量训练有区别，快来探索。</li>
+        <li><b>新增「编辑动作」功能</b>，原来讨厌的自带动作，现在眼不见、心不烦，都可以删掉。</li>
+        <li><b>照抄某天</b>：一周安排更好用了，现在可以「照抄某天」，周二周四练得一样？现在按一下按钮、双向同步。另外软件默认的安排，现在可以一键删除。</li>
+        <li><b>新增「plus 步」</b>，轻轻松松？做不动了？给感受一点表达欲。</li>
+        <li><b>优化</b>：UI 和部分逻辑，更漂亮、更灵光。</li>
+      </ul>
+    </details>
+
+    <details class="log">
+      <summary>
+        <span class="log-ver">V2.1.0</span>
+        <span class="log-date">2026.11.24</span>
+        <span class="log-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary>
+      <ul>
+        <li><b>图标与界面</b>：Repy 加入软件，带来焕然一新的应用图标与界面。</li>
+        <li><b>三个核心页面</b>：撰写、复盘、趋势，构成软件的核心功能。其中，「趋势」是新增功能，帮助健身者更好地查看进步情况。「撰写」界面优化，新增手臂部位。「复盘」中可以查看全部记录，自定义程度大大增加。</li>
+        <li><b>导入记录</b>：新增「导入功能」，把其他地方的记录通过 AI 翻译成 Repy 能看懂的格式，一键导入，放进「复盘」中。</li>
+        <li><b>分享软件</b>：新增「分享功能」，独乐乐不如众乐乐，重新打包分享给朋友。安装包放哪里听你的。</li>
+        <li><b>细节优化</b>：大量 UI、细节优化，期待被发现……</li>
+      </ul>
+    </details>
+
+    <details class="log">
+      <summary>
+        <span class="log-ver">V2.0.0</span>
+        <span class="log-date">2026.11.23</span>
+        <span class="log-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary>
+      <ul>
+        <li><b>新增「补记录」</b>：在记录总览的日历上点「补记录」，整月日期全部变绿</li>
+        <li>弹窗告诉你「可以补记录了」；关掉它，在绿色日历上点中哪一天，才会带着那一天跳回「健身记录生成器」</li>
+        <li>主界面底部常驻一条提示：正在补某年某月某日。照常编排动作，按下「保存本次训练」就补进那天，提示立刻消失</li>
+        <li>补记过的记录在总览里带绿色「补记」标记，并直接停在那一天；补错了点「取消补记」就能退出</li>
+        <li>「添加动作」收成动作池标题右侧的小按钮，展开/收起换成面板底部的大按钮</li>
+        <li>总览里的记录可以删：每条记录右上角「删除」（点两次确认），每个动作右侧的「×」可以单删一个动作</li>
+      </ul>
+    </details>
+    <!-- RELEASES:END -->
+  </section>
+
+  <footer class="foot">
+    <span>数据都留在你自己电脑上，删掉文件夹就等于全删干净。</span>
+    <span>源子 · 自用工具</span>
+  </footer>
+
+</div>
+</body>
+</html>

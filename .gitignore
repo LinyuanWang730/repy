@@ -1,0 +1,55 @@
+# ── 依赖与打包产物（两台机器各自装、各自打，绝不进仓库）──
+node_modules/
+dist/
+out/
+
+# ── 每次自检 / 截图都会重写，属于临时文件（4-同步.bat 用 git add -A）──
+# 浏览器 / 自检的临时 profile 目录
+build/.*-profile/
+# 下划线开头的临时产物（png / txt / ico / icns / log）
+build/_*
+# 自检截图与输出
+build/check-*
+# 小程序截图 / tab 图标试制 / 预览图 / 图标试制
+build/neo-*
+build/tab-*
+build/preview*
+build/icon_*
+# 打包真正会用到的资源不忽略：icon.ico / icon.icns / installer*.bmp / installer.nsh
+
+# ── 安装包不进门：走 dist，或临时放桌面 ──
+*.exe
+*.dmg
+*.zip
+
+# ── 日志 ──
+*.log
+
+# ── Python 缓存（scripts 里有几个 py 工具会生成）──
+__pycache__/
+*.pyc
+
+# ── macOS 的系统垃圾（iCloud 同步时最容易夹带）──
+.DS_Store
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# ── Windows 的系统垃圾 ──
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ── 编辑器 ──
+.vscode/
+.idea/
+*.swp
+
+# ── 解包临时副本（4-同步.bat 用 git add -A，不挡就会被提交进仓库）──
+.tmp-unpack/
+.tmp-preview/
+
+# ── 私人内容：WorkBuddy 工作区附属（开发笔记、应用卡登记），不进公开仓库 ──
+.workbuddy/
+.wbapp_*.genie
