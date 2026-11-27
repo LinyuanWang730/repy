@@ -1,0 +1,128 @@
+{
+  "name": "fitness-log-generator",
+  "version": "2.1.3",
+  "description": "Repy - 撰写与复盘，训练记录桌面版",
+  "main": "main.js",
+  "author": "源子",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron .",
+    "build": "node scripts/build-win.js",
+    "build:dir": "electron-builder --win --dir -c.electronDist=node_modules/electron/dist",
+    "build:mac": "node scripts/build-mac.js",
+    "build:mac:arm64": "electron-builder --mac --arm64",
+    "build:mac:x64": "electron-builder --mac --x64",
+    "start": "electron .",
+    "bump": "node scripts/bump.js",
+    "bake-chat": "node scripts/bake-chat.js"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.yuanzi.fitnesslog",
+    "productName": "Repy",
+    "artifactName": "Repy-${version}-${arch}.${ext}",
+    "portable": {
+      "artifactName": "Repy-${version}-Portable.${ext}"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "update.json",
+        "to": "update.json"
+      }
+    ],
+    "afterPack": "scripts/after-pack.js",
+    "win": {
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "icon": "build/icon.icns",
+      "category": "public.app-category.healthcare-fitness",
+      "darkModeSupport": false,
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "extendInfo": {
+        "CFBundleDisplayName": "Repy",
+        "CFBundleName": "Repy",
+        "NSHumanReadableCopyright": "源子 · 自用工具",
+        "LSMinimumSystemVersion": "10.15.0"
+      },
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "Repy V${version}",
+      "icon": "build/icon.icns",
+      "iconSize": 110,
+      "window": {
+        "width": 560,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 150,
+          "y": 180,
+          "type": "file"
+        },
+        {
+          "x": 410,
+          "y": 180,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "nsis": {
+      "artifactName": "Repy-${version}-Setup.${ext}",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "deleteAppDataOnUninstall": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Repy",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/uninstallerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "include": "build/installer.nsh"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# 跨平台换行符规则 —— 这一条决定了「同一份代码在 Windows 和 Mac 上都能双击运行」。
+# 仓库内部一律存 LF，检出时按文件类型自动转换。
+
+* text=auto eol=lf
+
+# Windows 双击脚本必须是 CRLF，否则 cmd 会把整行当命令名，闪一下就没了
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# macOS 双击脚本必须是 LF，否则报 bad interpreter: /bin/bash^M
+*.command text eol=lf
+*.sh      text eol=lf
+
+# 二进制：不做任何换行转换，否则图片/图标会被写坏
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.icns binary
+*.bmp  binary
+*.exe  binary
+*.dmg  binary
+*.zip  binary
+
+# 锁文件不参与 diff 和语言统计（两台机器 npm install 会微调，没必要看差异）
+package-lock.json -diff linguist-generated
